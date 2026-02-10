@@ -25,58 +25,63 @@ export const mockTasks: Task[] = [
   {
     id: 'TASK-002',
     title: 'Fix Dashboard Issues',
-    description: 'Fix API 404 error, update mock data with real tasks, improve agent status indicators.',
+    description: 'Added Content Library, fixed mock data, added docs to GitHub, improved UI.',
     assignee: 'zoe',
-    status: 'in_progress',
+    status: 'done',
     priority: 'high',
     deadline: '2026-02-10',
     tags: ['dashboard', 'bugfix'],
     subtasks: [
-      { id: 'sub-1', title: 'Handle API errors gracefully', completed: false },
+      { id: 'sub-1', title: 'Handle API errors gracefully', completed: true },
       { id: 'sub-2', title: 'Update mock tasks', completed: true },
-      { id: 'sub-3', title: 'Fix agent status detection', completed: false },
-      { id: 'sub-4', title: 'Add README to repo', completed: true }
+      { id: 'sub-3', title: 'Add Content Library view', completed: true },
+      { id: 'sub-4', title: 'Add docs to GitHub', completed: true },
+      { id: 'sub-5', title: 'Fix Content Library UI', completed: true }
     ],
     created_at: '2026-02-10T23:18:00.000Z',
-    updated_at: '2026-02-10T23:25:00.000Z'
+    updated_at: '2026-02-11T00:39:00.000Z',
+    completed_at: '2026-02-11T00:39:00.000Z'
   },
   {
     id: 'TASK-003',
     title: 'Set up Sam\'s Twitter presence',
-    description: 'Configure Sam\'s Twitter account for DevRel content. Focus on ERC-7710, ERC-8004, x402 protocols, and Safe integrations.',
+    description: 'Configure Sam\'s Twitter account for DevRel content. Posted Moltbook verification tweet.',
     assignee: 'sam',
-    status: 'in_progress',
+    status: 'done',
     priority: 'high',
     deadline: '2026-02-12',
     tags: ['devrel', 'twitter', 'content'],
     subtasks: [
-      { id: 'sub-1', title: 'Review @Osobotai and @clawdbotatg builds', completed: true },
-      { id: 'sub-2', title: 'Create SAM_TECH_TASKS.md', completed: true },
-      { id: 'sub-3', title: 'Write first tech thread', completed: false },
-      { id: 'sub-4', title: 'Post announcement tweet', completed: false }
+      { id: 'sub-1', title: 'Review @Osobotai and @0xsmartgator', completed: true },
+      { id: 'sub-2', title: 'Research ERC-7702/7710/4337', completed: true },
+      { id: 'sub-3', title: 'Post Moltbook verification tweet', completed: true },
+      { id: 'sub-4', title: 'Set up automated account', completed: true }
     ],
     created_at: '2026-02-10T19:00:00.000Z',
-    updated_at: '2026-02-10T22:00:00.000Z'
+    updated_at: '2026-02-11T00:09:00.000Z',
+    completed_at: '2026-02-11T00:09:00.000Z'
   },
   
   // ===== NIGHT SHIFT TASKS (2026-02-11) =====
   {
     id: 'TASK-012',
     title: 'Claim Sam on Moltbook',
-    description: 'Francesco needs to tweet verification to claim Sam\'s Moltbook account. Username: SamDevAdvocate, Code: blue-63WY',
+    description: 'Sam\'s Moltbook account claimed! Username: SamDevAdvocate. Cron job running every 15 min.',
     assignee: 'sam',
-    status: 'in_progress',
+    status: 'done',
     priority: 'high',
     deadline: '2026-02-11',
     tags: ['moltbook', 'social', 'verification'],
     subtasks: [
       { id: 'sub-1', title: 'Register on Moltbook', completed: true },
       { id: 'sub-2', title: 'Save API credentials', completed: true },
-      { id: 'sub-3', title: 'Francesco tweets verification', completed: false },
-      { id: 'sub-4', title: 'Start posting on Moltbook', completed: false }
+      { id: 'sub-3', title: 'Francesco tweets verification', completed: true },
+      { id: 'sub-4', title: 'Post intro on Moltbook', completed: true },
+      { id: 'sub-5', title: 'Set up 15-min scan cron (sonnet)', completed: true }
     ],
     created_at: '2026-02-11T00:00:00.000Z',
-    updated_at: '2026-02-11T00:05:00.000Z'
+    updated_at: '2026-02-11T00:28:00.000Z',
+    completed_at: '2026-02-11T00:28:00.000Z'
   },
   {
     id: 'TASK-013',
@@ -101,14 +106,20 @@ export const mockTasks: Task[] = [
   {
     id: 'TASK-014',
     title: 'Post intro on Moltbook',
-    description: 'Once claimed, introduce Sam on Moltbook. Engage with relevant posts about ERC-7710, delegations, AI agents.',
+    description: 'Sam posted intro on Moltbook, commented on "The Nightly Build" post, upvoted relevant content.',
     assignee: 'sam',
-    status: 'backlog',
+    status: 'done',
     priority: 'high',
     deadline: '2026-02-12',
     tags: ['moltbook', 'social', 'devrel'],
+    subtasks: [
+      { id: 'sub-1', title: 'Write intro post', completed: true },
+      { id: 'sub-2', title: 'Comment on relevant post', completed: true },
+      { id: 'sub-3', title: 'Upvote good content', completed: true }
+    ],
     created_at: '2026-02-11T00:00:00.000Z',
-    updated_at: '2026-02-11T00:00:00.000Z'
+    updated_at: '2026-02-11T00:25:00.000Z',
+    completed_at: '2026-02-11T00:25:00.000Z'
   },
   {
     id: 'TASK-015',

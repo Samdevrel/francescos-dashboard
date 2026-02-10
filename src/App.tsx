@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout } from './components/Layout'
 import { Dashboard } from './components/Dashboard'
 import { KanbanBoard } from './components/KanbanBoard'
@@ -6,16 +6,40 @@ import { TaskList } from './components/TaskList'
 import { CurrentFocus } from './components/CurrentFocus'
 import { ActivityLog } from './components/ActivityLog-new'
 import { AgentProfile } from './components/AgentProfile'
+import { AdminPanel } from './components/AdminPanel'
 import { mockTasks } from './mockData'
 import { useDashboardData } from './hooks/useOpenClaw'
 import { Plus } from 'lucide-react'
+import { Task } from './types'
 
-type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'agent'
+type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'agent' | 'admin'
+
+// Load tasks from localStorage or use mock data
+const loadTasks = (): Task[] => {
+  try {
+    const saved = localStorage.getItem('dashboard_tasks')
+    if (saved) {
+      return JSON.parse(saved)
+    }
+  } catch (e) {
+    console.error('Failed to load tasks from localStorage:', e)
+  }
+  return mockTasks
+}
+
+// Save tasks to localStorage
+const saveTasks = (tasks: Task[]) => {
+  try {
+    localStorage.setItem('dashboard_tasks', JSON.stringify(tasks))
+  } catch (e) {
+    console.error('Failed to save tasks to localStorage:', e)
+  }
+}
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('dashboard')
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null)
-  const [tasks, setTasks] = useState(mockTasks)
+  const [tasks, setTasks] = useState<Task[]>(loadTasks)
   const [showCreateModal, setShowCreateModal] = useState(false)
 
   // Real-time data from OpenClaw
@@ -29,6 +53,11 @@ function App() {
     workingStatus,
     cronJobs 
   } = useDashboardData(5000)
+
+  // Save tasks whenever they change
+  useEffect(() => {
+    saveTasks(tasks)
+  }, [tasks])
 
   const handleViewChange = (view: View) => {
     if (view !== 'agent') {
@@ -47,19 +76,27 @@ function App() {
     setCurrentView('dashboard')
   }
 
-  const handleTaskUpdate = (taskId: string, updates: Partial<typeof mockTasks[0]>) => {
+  const handleTaskUpdate = (taskId: string, updates: Partial<Task>) => {
     setTasks(tasks.map(task =>
       task.id === taskId ? { ...task, ...updates, updated_at: new Date().toISOString() } : task
     ))
   }
 
+  const handleAddTask = (task: Task) => {
+    setTasks([...tasks, task])
+  }
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(tasks.filter(t => t.id !== taskId))
+  }
+
   const handleCreateTask = (title: string) => {
-    const newTask = {
+    const newTask: Task = {
       id: `TASK-${String(tasks.length + 1).padStart(3, '0')}`,
       title,
       assignee: 'zoe',
-      status: 'backlog' as const,
-      priority: 'medium' as const,
+      status: 'backlog',
+      priority: 'medium',
       tags: [],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -73,6 +110,9 @@ function App() {
     ? agentStatuses.find(a => a.id === selectedAgentId)
     : undefined
 
+  // Determine if we're using mock data (API unavailable)
+  const usingMockData = error !== null && agentStatuses.length > 0
+
   return (
     <Layout 
       currentView={currentView === 'agent' ? 'dashboard' : currentView} 
@@ -80,7 +120,7 @@ function App() {
       workingStatus={workingStatus}
       connected={connected}
       lastRefresh={lastRefresh}
-      error={error}
+      error={usingMockData ? null : error} // Hide error when using mock data fallback
     >
       {currentView === 'dashboard' && (
         <Dashboard 
@@ -88,7 +128,7 @@ function App() {
           onTaskUpdate={handleTaskUpdate} 
           agentStatuses={agentStatuses}
           sessions={sessions}
-          connected={connected}
+          connected={usingMockData ? true : connected} // Show as connected when using mock
           loading={loading}
           onAgentClick={handleAgentClick}
         />
@@ -108,6 +148,14 @@ function App() {
           agentId={selectedAgentId}
           onBack={handleBackFromAgent}
           realTimeStatus={selectedAgentStatus}
+        />
+      )}
+      {currentView === 'admin' && (
+        <AdminPanel 
+          tasks={tasks}
+          onTasksUpdate={setTasks}
+          onAddTask={handleAddTask}
+          onDeleteTask={handleDeleteTask}
         />
       )}
       
@@ -141,7 +189,7 @@ function App() {
         </div>
       )}
       
-      {currentView !== 'agent' && (
+      {currentView !== 'agent' && currentView !== 'admin' && (
         <button className="fab" onClick={() => setShowCreateModal(true)}>
           <Plus size={24} />
         </button>

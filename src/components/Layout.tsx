@@ -1,6 +1,6 @@
-import { Layout as LayoutIcon, KanbanSquare, List, Zap, Activity, Wifi, WifiOff, RefreshCw } from 'lucide-react'
+import { Layout as LayoutIcon, KanbanSquare, List, Zap, Activity, Wifi, WifiOff, RefreshCw, Lock } from 'lucide-react'
 
-type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs'
+type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'admin'
 
 interface LayoutProps {
   currentView: View
@@ -26,7 +26,8 @@ export function Layout({
     { id: 'kanban' as View, label: 'Kanban', icon: KanbanSquare },
     { id: 'list' as View, label: 'Task List', icon: List },
     { id: 'focus' as View, label: 'Focus', icon: Zap },
-    { id: 'logs' as View, label: 'Activity Log', icon: Activity }
+    { id: 'logs' as View, label: 'Activity Log', icon: Activity },
+    { id: 'admin' as View, label: 'Admin', icon: Lock }
   ]
 
   const timeSinceRefresh = lastRefresh ? Math.floor((Date.now() - lastRefresh) / 1000) : 0

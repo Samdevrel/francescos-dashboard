@@ -10,8 +10,8 @@ const agentMeta: Record<string, { emoji: string; role: string; color: string }> 
   sam: { emoji: '🔮', role: 'Crypto & DevRel', color: '#8b5cf6' },
   leo: { emoji: '🦁', role: 'VC Analyst', color: '#f59e0b' },
   mika: { emoji: '✨', role: 'Creative', color: '#ec4899' },
-  rex: { emoji: '🤖', role: 'Code & Infra', color: '#10b981' },
-  victor: { emoji: '🎯', role: 'QA & Verify', color: '#ef4444' },
+  rex: { emoji: '🤖', role: 'Trading Bot', color: '#10b981' },
+  victor: { emoji: '🎯', role: 'Job Market Agent', color: '#ef4444' },
   dante: { emoji: '🌍', role: 'Africa Ops', color: '#06b6d4' },
 }
 

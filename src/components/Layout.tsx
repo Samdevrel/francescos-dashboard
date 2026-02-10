@@ -1,6 +1,6 @@
-import { Layout as LayoutIcon, KanbanSquare, List, Zap, Activity, Wifi, WifiOff, RefreshCw, Lock } from 'lucide-react'
+import { Layout as LayoutIcon, KanbanSquare, List, Zap, Activity, Wifi, WifiOff, RefreshCw, Lock, BookOpen } from 'lucide-react'
 
-type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'admin'
+type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'admin' | 'library'
 
 interface LayoutProps {
   currentView: View
@@ -27,6 +27,7 @@ export function Layout({
     { id: 'list' as View, label: 'Task List', icon: List },
     { id: 'focus' as View, label: 'Focus', icon: Zap },
     { id: 'logs' as View, label: 'Activity Log', icon: Activity },
+    { id: 'library' as View, label: 'Library', icon: BookOpen },
     { id: 'admin' as View, label: 'Admin', icon: Lock }
   ]
 

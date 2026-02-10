@@ -7,12 +7,13 @@ import { CurrentFocus } from './components/CurrentFocus'
 import { ActivityLog } from './components/ActivityLog-new'
 import { AgentProfile } from './components/AgentProfile'
 import { AdminPanel } from './components/AdminPanel'
+import { ContentLibrary } from './components/ContentLibrary'
 import { mockTasks } from './mockData'
 import { useDashboardData } from './hooks/useOpenClaw'
 import { Plus } from 'lucide-react'
 import { Task } from './types'
 
-type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'agent' | 'admin'
+type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'agent' | 'admin' | 'library'
 
 // Load tasks from localStorage or use mock data
 const loadTasks = (): Task[] => {
@@ -158,6 +159,7 @@ function App() {
           onDeleteTask={handleDeleteTask}
         />
       )}
+      {currentView === 'library' && <ContentLibrary />}
       
       {showCreateModal && (
         <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>

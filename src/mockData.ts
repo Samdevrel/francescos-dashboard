@@ -59,6 +59,70 @@ export const mockTasks: Task[] = [
     updated_at: '2026-02-10T22:00:00.000Z'
   },
   
+  // ===== NIGHT SHIFT TASKS (2026-02-11) =====
+  {
+    id: 'TASK-012',
+    title: 'Claim Sam on Moltbook',
+    description: 'Francesco needs to tweet verification to claim Sam\'s Moltbook account. Username: SamDevAdvocate, Code: blue-63WY',
+    assignee: 'sam',
+    status: 'in_progress',
+    priority: 'high',
+    deadline: '2026-02-11',
+    tags: ['moltbook', 'social', 'verification'],
+    subtasks: [
+      { id: 'sub-1', title: 'Register on Moltbook', completed: true },
+      { id: 'sub-2', title: 'Save API credentials', completed: true },
+      { id: 'sub-3', title: 'Francesco tweets verification', completed: false },
+      { id: 'sub-4', title: 'Start posting on Moltbook', completed: false }
+    ],
+    created_at: '2026-02-11T00:00:00.000Z',
+    updated_at: '2026-02-11T00:05:00.000Z'
+  },
+  {
+    id: 'TASK-013',
+    title: 'Night Research: ERC-7702/7710/4337',
+    description: 'Deep dive research on account abstraction standards, MetaMask delegation framework, and key people in the space.',
+    assignee: 'zoe',
+    status: 'done',
+    priority: 'high',
+    tags: ['research', 'ethereum', 'standards'],
+    subtasks: [
+      { id: 'sub-1', title: 'Study ERC-7702 (Set Code for EOAs)', completed: true },
+      { id: 'sub-2', title: 'Study ERC-4337 (Account Abstraction)', completed: true },
+      { id: 'sub-3', title: 'Research @Osobotai and @0xsmartgator', completed: true },
+      { id: 'sub-4', title: 'Review MetaMask delegation docs', completed: true },
+      { id: 'sub-5', title: 'Check Vitalik blog posts', completed: true },
+      { id: 'sub-6', title: 'Compile research report', completed: true }
+    ],
+    created_at: '2026-02-11T00:00:00.000Z',
+    updated_at: '2026-02-11T00:30:00.000Z',
+    completed_at: '2026-02-11T00:30:00.000Z'
+  },
+  {
+    id: 'TASK-014',
+    title: 'Post intro on Moltbook',
+    description: 'Once claimed, introduce Sam on Moltbook. Engage with relevant posts about ERC-7710, delegations, AI agents.',
+    assignee: 'sam',
+    status: 'backlog',
+    priority: 'high',
+    deadline: '2026-02-12',
+    tags: ['moltbook', 'social', 'devrel'],
+    created_at: '2026-02-11T00:00:00.000Z',
+    updated_at: '2026-02-11T00:00:00.000Z'
+  },
+  {
+    id: 'TASK-015',
+    title: 'Set up Supabase tables',
+    description: 'Run SQL schema in Supabase dashboard to create tasks, agent_statuses, and activity_logs tables for real-time sync.',
+    assignee: 'zoe',
+    status: 'backlog',
+    priority: 'high',
+    deadline: '2026-02-11',
+    tags: ['supabase', 'database', 'dashboard'],
+    created_at: '2026-02-10T23:45:00.000Z',
+    updated_at: '2026-02-10T23:45:00.000Z'
+  },
+
   // ===== BACKLOG =====
   {
     id: 'TASK-004',

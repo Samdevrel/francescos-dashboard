@@ -203,7 +203,7 @@ class OpenClawAPI {
     const mainSession = sessions.find(s => s.key === 'agent:main:main')
     if (mainSession) {
       const timeSinceUpdate = Date.now() - mainSession.updatedAt
-      const isRecent = timeSinceUpdate < 5 * 60 * 1000 // 5 minutes
+      const isRecent = timeSinceUpdate < 10 * 60 * 1000 // 10 minutes (increased from 5)
       
       agentMap.set('zoe', {
         id: 'zoe',
@@ -213,7 +213,7 @@ class OpenClawAPI {
         model: mainSession.model,
         tokenUsage: mainSession.totalTokens,
         sessionKey: mainSession.key,
-        currentTask: this.extractCurrentTask(mainSession),
+        currentTask: isRecent ? 'Responding to Francesco' : this.extractCurrentTask(mainSession),
       })
     }
 
@@ -227,7 +227,7 @@ class OpenClawAPI {
         
         if (keyLower.includes(agentId) || labelLower.includes(agentId)) {
           const timeSinceUpdate = Date.now() - session.updatedAt
-          const isRecent = timeSinceUpdate < 5 * 60 * 1000
+          const isRecent = timeSinceUpdate < 10 * 60 * 1000 // 10 minutes
           
           agentMap.set(agentId, {
             id: agentId,
@@ -244,6 +244,56 @@ class OpenClawAPI {
     })
 
     return Array.from(agentMap.values())
+  }
+
+  // Get mock/fallback agent statuses when API is unavailable
+  getMockAgentStatuses(): AgentStatus[] {
+    const now = Date.now()
+    return [
+      {
+        id: 'zoe',
+        name: 'Zoe',
+        status: 'active',
+        lastActivity: now,
+        currentTask: 'Helping Francesco fix dashboard issues',
+        model: 'claude-opus-4-5',
+      },
+      {
+        id: 'sam',
+        name: 'Sam',
+        status: 'working',
+        lastActivity: now - 5 * 60 * 1000,
+        currentTask: 'Setting up DevRel presence',
+        model: 'claude-sonnet-4',
+      },
+      {
+        id: 'leo',
+        name: 'Leo',
+        status: 'idle',
+        lastActivity: now - 2 * 60 * 60 * 1000,
+      },
+      {
+        id: 'mika',
+        name: 'Mika',
+        status: 'offline',
+      },
+      {
+        id: 'rex',
+        name: 'Rex',
+        status: 'offline',
+      },
+      {
+        id: 'victor',
+        name: 'Victor',
+        status: 'idle',
+        lastActivity: now - 60 * 60 * 1000,
+      },
+      {
+        id: 'dante',
+        name: 'Dante',
+        status: 'offline',
+      },
+    ]
   }
 
   private extractCurrentTask(session: Session): string | undefined {

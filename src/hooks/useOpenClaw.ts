@@ -40,10 +40,15 @@ export function useAgentStatuses(refreshInterval: number = 5000) {
 
   useEffect(() => {
     if (sessions.length > 0) {
+      // Parse real session data when API is working
       const statuses = openclawAPI.parseAgentStatuses(sessions)
       setAgentStatuses(statuses)
+    } else if (error) {
+      // Use mock data when API fails (e.g., running on Vercel without local gateway)
+      const mockStatuses = openclawAPI.getMockAgentStatuses()
+      setAgentStatuses(mockStatuses)
     }
-  }, [sessions])
+  }, [sessions, error])
 
   return { agentStatuses, sessions, loading, error, refresh, lastRefresh }
 }

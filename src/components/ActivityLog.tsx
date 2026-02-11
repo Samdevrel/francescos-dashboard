@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { Activity, Database, AlertTriangle } from 'lucide-react'
-import { activityLogger } from '../logger-fixed'
+import { useState, useEffect } from 'react'
+import { Activity, Database, AlertTriangle, RefreshCw, Wifi, WifiOff } from 'lucide-react'
+import { useSupabaseActivityLogs } from '../hooks/useSupabase'
+import { addActivityLog } from '../lib/supabase'
 
 interface LogEntry {
   id: string
@@ -14,22 +15,34 @@ interface LogEntry {
 }
 
 export function ActivityLog() {
-  const [logs, setLogs] = useState<LogEntry[]>(() => activityLogger.getLogs())
+  const { logs: supabaseLogs, loading, error } = useSupabaseActivityLogs(100)
   const [filterAgent, setFilterAgent] = useState('all')
   const [filterLevel, setFilterLevel] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [quickLogText, setQuickLogText] = useState('')
 
-  const handleAddLog = (action: string, details: string, level: 'info' | 'success' | 'warning' | 'error', model?: string, duration?: string) => {
-    activityLogger.add({
+  // Convert Supabase logs to component format
+  const logs: LogEntry[] = supabaseLogs.map(log => ({
+    id: String(log.id),
+    timestamp: new Date(log.timestamp),
+    agent: log.agent || 'Unknown',
+    action: log.action || '',
+    details: log.details || '',
+    model: log.model || undefined,
+    level: (log.level as LogEntry['level']) || 'info',
+    duration: log.duration || undefined,
+  }))
+
+  const handleAddLog = async (action: string, details: string, level: 'info' | 'success' | 'warning' | 'error', model?: string) => {
+    await addActivityLog({
+      timestamp: new Date().toISOString(),
       agent: 'Zoe',
       action,
       details,
       level,
-      model,
-      duration
+      model: model || 'openclaw-dashboard',
+      duration: null,
     })
-    setLogs(() => activityLogger.getLogs())
   }
 
   const getLevelIcon = (level: LogEntry['level']) => {
@@ -61,7 +74,13 @@ export function ActivityLog() {
           <Activity className="log-icon" />
           <div>
             <h2>Activity Log</h2>
-            <p className="subtitle">Granular tracking of all agent activity</p>
+            <p className="subtitle">
+              {loading ? 'Loading...' : error ? 'Error loading logs' : `Live data from Supabase (${logs.length} events)`}
+            </p>
+          </div>
+          <div className={`connection-status ${error ? 'disconnected' : 'connected'}`}>
+            {error ? <WifiOff size={16} /> : <Wifi size={16} />}
+            <span>{error ? 'Disconnected' : 'Live'}</span>
           </div>
         </div>
         <div className="log-filters">
@@ -119,6 +138,13 @@ export function ActivityLog() {
         </div>
       </div>
 
+      {loading && (
+        <div className="loading-spinner">
+          <RefreshCw className="spin" size={24} />
+          <span>Loading activity logs...</span>
+        </div>
+      )}
+
       <div className="log-entries">
         {filteredLogs.map(log => (
           <div key={log.id} className={`log-entry level-${log.level}`}>
@@ -141,10 +167,10 @@ export function ActivityLog() {
             </div>
           </div>
         ))}
-        {filteredLogs.length === 0 && (
+        {filteredLogs.length === 0 && !loading && (
           <div className="no-logs">
             <Activity size={48} className="no-logs-icon" />
-            <p>No logs match your filters</p>
+            <p>{error ? 'Failed to load logs from Supabase' : 'No logs match your filters'}</p>
           </div>
         )}
       </div>
@@ -160,34 +186,17 @@ export function ActivityLog() {
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 if (quickLogText.trim()) {
-                  handleAddLog(
-                    'Quick entry',
-                    quickLogText.trim(),
-                    'info'
-                  )
+                  handleAddLog('Quick entry', quickLogText.trim(), 'info')
                   setQuickLogText('')
                 }
               }
             }}
             className="quick-add-input"
           />
-          <select
-            value="info"
-            className="level-select"
-          >
-            <option value="info">Info</option>
-            <option value="success">Success</option>
-            <option value="warning">Warning</option>
-            <option value="error">Error</option>
-          </select>
           <button
             onClick={() => {
               if (quickLogText.trim()) {
-                handleAddLog(
-                  'Quick entry',
-                  quickLogText.trim(),
-                  'info'
-                )
+                handleAddLog('Quick entry', quickLogText.trim(), 'info')
                 setQuickLogText('')
               }
             }}
@@ -241,6 +250,26 @@ export function ActivityLog() {
           font-size: 0.875rem;
         }
 
+        .connection-status {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.375rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .connection-status.connected {
+          background: rgba(16, 185, 129, 0.15);
+          color: var(--accent-green);
+        }
+
+        .connection-status.disconnected {
+          background: rgba(239, 68, 68, 0.15);
+          color: var(--accent-red);
+        }
+
         .log-filters {
           display: flex;
           gap: 0.75rem;
@@ -260,11 +289,6 @@ export function ActivityLog() {
 
         .log-search:focus {
           border-color: var(--accent-blue);
-        }
-
-        .log-filters {
-          display: flex;
-          gap: 0.5rem;
         }
 
         .log-filter {
@@ -303,6 +327,24 @@ export function ActivityLog() {
         .stat-label {
           font-size: 0.875rem;
           color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          padding: 2rem;
+          color: var(--text-secondary);
+        }
+
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         .log-entries {
@@ -467,7 +509,7 @@ export function ActivityLog() {
           border: 1px solid var(--border);
           border-radius: 12px;
           padding: 1.5rem;
-          margin-bottom: 1.5rem;
+          margin-top: 1.5rem;
         }
 
         .quick-add-title {
@@ -495,16 +537,6 @@ export function ActivityLog() {
 
         .quick-add-input:focus {
           border-color: var(--accent-blue);
-        }
-
-        .level-select {
-          padding: 0.625rem 1rem;
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border);
-          border-radius: 8px;
-          color: var(--text-primary);
-          font-size: 0.875rem;
-          cursor: pointer;
         }
 
         .quick-add-btn {

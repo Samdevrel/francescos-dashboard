@@ -4,7 +4,7 @@ import { Dashboard } from './components/Dashboard'
 import { KanbanBoard } from './components/KanbanBoard'
 import { TaskList } from './components/TaskList'
 import { CurrentFocus } from './components/CurrentFocus'
-import { ActivityLog } from './components/ActivityLog-new'
+import { ActivityLog } from './components/ActivityLog'
 import { AgentProfile } from './components/AgentProfile'
 import { AdminPanel } from './components/AdminPanel'
 import { ContentLibrary } from './components/ContentLibrary'
@@ -143,7 +143,7 @@ function App() {
           workingStatus={workingStatus}
         />
       )}
-      {currentView === 'logs' && <ActivityLog sessions={sessions} />}
+      {currentView === 'logs' && <ActivityLog />}
       {currentView === 'agent' && selectedAgentId && (
         <AgentProfile 
           agentId={selectedAgentId}

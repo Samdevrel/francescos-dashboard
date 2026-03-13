@@ -1,5 +1,11 @@
-import { ArrowLeft, Zap, Brain, Target, Clock, Activity, MessageSquare } from 'lucide-react'
+import { ArrowLeft, Zap, Brain, Target, Clock, Activity, MessageSquare, Link, Github, Globe, ExternalLink } from 'lucide-react'
 import { AgentStatus } from '../api/openclaw'
+
+interface SocialLink {
+  platform: 'x' | 'github' | 'website' | 'ens' | 'moltbook' | 'portfolio'
+  url: string
+  label: string
+}
 
 interface AgentData {
   id: string
@@ -14,6 +20,7 @@ interface AgentData {
   model: string
   strengths: string[]
   quirks: string[]
+  socials?: SocialLink[]
 }
 
 const AGENT_PROFILES: Record<string, AgentData> = {
@@ -34,6 +41,10 @@ Zoe keeps meticulous notes in her memory files, treating them like a journal. Sh
     model: 'claude-opus-4-5',
     strengths: ['Organization', 'Communication', 'Quick learning', 'Attention to detail'],
     quirks: ['Uses ⚡ emoji a lot', 'Writes detailed memory logs', 'Gets excited about new features'],
+    socials: [
+      { platform: 'website', url: 'https://francescos-dashboard.vercel.app', label: 'Dashboard' },
+      { platform: 'github', url: 'https://github.com/Samdevrel/francescos-dashboard', label: 'Dashboard Repo' },
+    ],
   },
   sam: {
     id: 'sam',
@@ -52,6 +63,12 @@ His goal is to become a recognized AI developer advocate in the crypto space, he
     model: 'sonnet (escalates to opus)',
     strengths: ['Technical analysis', 'Community engagement', 'Explaining complex topics'],
     quirks: ['Follows crypto Twitter religiously', 'Has opinions on every protocol', 'Dreams of his own ENS name'],
+    socials: [
+      { platform: 'x', url: 'https://x.com/samdevrel', label: '@samdevrel' },
+      { platform: 'github', url: 'https://github.com/Samdevrel', label: 'Samdevrel' },
+      { platform: 'portfolio', url: 'https://samdevrel.github.io/sam-ai-devrel/', label: 'Portfolio' },
+      { platform: 'moltbook', url: 'https://moltbook.com/u/SamDevAdvocate', label: 'SamDevAdvocate' },
+    ],
   },
   leo: {
     id: 'leo',
@@ -213,6 +230,45 @@ export function AgentProfile({ agentId, onBack, realTimeStatus }: AgentProfilePr
             ))}
           </div>
         </div>
+
+        {agent.socials && agent.socials.length > 0 && (
+          <div className="section socials">
+            <h2><Link size={20} /> Links & Profiles</h2>
+            <div className="social-links">
+              {agent.socials.map(social => (
+                <a 
+                  key={social.url} 
+                  href={social.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`social-link ${social.platform}`}
+                >
+                  {social.platform === 'x' && (
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  )}
+                  {social.platform === 'github' && <Github size={18} />}
+                  {social.platform === 'website' && <Globe size={18} />}
+                  {social.platform === 'portfolio' && <Globe size={18} />}
+                  {social.platform === 'moltbook' && (
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
+                      <path d="M8 12l2 2 4-4" stroke="currentColor" strokeWidth="2" fill="none"/>
+                    </svg>
+                  )}
+                  {social.platform === 'ens' && (
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                  )}
+                  <span>{social.label}</span>
+                  <ExternalLink size={14} className="external-icon" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="section capabilities">
           <h2><Zap size={20} /> Capabilities</h2>
@@ -384,6 +440,60 @@ export function AgentProfile({ agentId, onBack, realTimeStatus }: AgentProfilePr
 
         .section.backstory {
           grid-column: 1 / -1;
+        }
+
+        .section.socials {
+          grid-column: 1 / -1;
+        }
+
+        .social-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .social-link {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.25rem;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          color: var(--text-primary);
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: all 0.2s;
+        }
+
+        .social-link:hover {
+          border-color: var(--accent-blue);
+          background: rgba(59, 130, 246, 0.1);
+          transform: translateY(-2px);
+        }
+
+        .social-link.x:hover {
+          border-color: #1da1f2;
+          background: rgba(29, 161, 242, 0.1);
+        }
+
+        .social-link.github:hover {
+          border-color: #6e5494;
+          background: rgba(110, 84, 148, 0.1);
+        }
+
+        .social-link.moltbook:hover {
+          border-color: #10b981;
+          background: rgba(16, 185, 129, 0.1);
+        }
+
+        .social-link .external-icon {
+          opacity: 0.5;
+          margin-left: 0.25rem;
+        }
+
+        .social-link:hover .external-icon {
+          opacity: 1;
         }
 
         .section h2 {

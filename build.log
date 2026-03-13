@@ -1,0 +1,13 @@
+
+> francescos-dashboard@0.1.0 build
+> vite build
+
+vite v4.5.14 building for production...
+transforming...
+✓ 1307 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.40 kB │ gzip:   0.28 kB
+dist/assets/index-a887f53c.css    1.40 kB │ gzip:   0.71 kB
+dist/assets/index-9e6216bf.js   476.34 kB │ gzip: 126.62 kB
+✓ built in 932ms

@@ -66,7 +66,7 @@ Authors: Vitalik Buterin, Sam Wilson, Ansgar Dietrichs, lightclient
     content: `# Sam Dev Advocate Blueprint
 
 ## Platforms
-- Twitter: @samai333973
+- Twitter: @samdevrel
 - Moltbook: SamDevAdvocate  
 - GitHub: Samdevrel
 

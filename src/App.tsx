@@ -8,12 +8,13 @@ import { ActivityLog } from './components/ActivityLog'
 import { AgentProfile } from './components/AgentProfile'
 import { AdminPanel } from './components/AdminPanel'
 import { ContentLibrary } from './components/ContentLibrary'
+import { Models } from './components/Models'
 import { mockTasks } from './mockData'
 import { useDashboardData } from './hooks/useOpenClaw'
 import { Plus } from 'lucide-react'
 import { Task } from './types'
 
-type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'agent' | 'admin' | 'library'
+type View = 'dashboard' | 'kanban' | 'list' | 'focus' | 'logs' | 'agent' | 'admin' | 'library' | 'models'
 
 // Load tasks from localStorage or use mock data
 const loadTasks = (): Task[] => {
@@ -160,6 +161,7 @@ function App() {
         />
       )}
       {currentView === 'library' && <ContentLibrary />}
+      {currentView === 'models' && <Models sessions={sessions} />}
       
       {showCreateModal && (
         <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>

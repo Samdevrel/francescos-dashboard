@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { openclawAPI, Session, AgentStatus, ActivityLogEntry, CronJob } from '../api/openclaw'
+import { mockSessions } from '../mockData'
 
 // Hook for fetching sessions with auto-refresh
 export function useSessions(refreshInterval: number = 5000) {
@@ -15,6 +16,8 @@ export function useSessions(refreshInterval: number = 5000) {
       setError(null)
       setLastRefresh(Date.now())
     } catch (err) {
+      // Use mock sessions with realistic token data when gateway unavailable
+      setSessions(mockSessions)
       setError(err instanceof Error ? err.message : 'Failed to fetch sessions')
     } finally {
       setLoading(false)

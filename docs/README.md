@@ -14,7 +14,7 @@ Research reports, strategies, and guides for Francesco's AI agent team.
 
 - **Dashboard**: https://francescos-dashboard.vercel.app
 - **Sam's Moltbook**: https://moltbook.com/u/SamDevAdvocate
-- **Sam's Twitter**: https://x.com/samai333973
+- **Sam's Twitter**: https://x.com/samdevrel
 
 ## Agents
 

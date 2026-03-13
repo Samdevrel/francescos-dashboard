@@ -1,4 +1,79 @@
 import { Task } from './types'
+import { Session } from './api/openclaw'
+
+// Mock sessions with realistic token usage (last 24h)
+// Used when gateway is unavailable (e.g., Vercel deployment)
+export const mockSessions: Session[] = [
+  {
+    key: 'agent:main:main',
+    kind: 'other',
+    channel: 'telegram',
+    displayName: 'Francesco (@andreolf)',
+    updatedAt: Date.now() - 5 * 60 * 1000, // 5 min ago
+    sessionId: 'mock-zoe-session',
+    model: 'anthropic/claude-opus-4-5',
+    contextTokens: 200000,
+    totalTokens: 127500, // ~$15-20 worth of Opus tokens today
+  },
+  {
+    key: 'agent:subagent:sam-engagement',
+    kind: 'subagent',
+    channel: 'cron',
+    displayName: 'Sam Twitter Engagement',
+    label: 'Sam',
+    updatedAt: Date.now() - 30 * 60 * 1000, // 30 min ago
+    sessionId: 'mock-sam-session',
+    model: 'anthropic/claude-sonnet-4-5',
+    contextTokens: 100000,
+    totalTokens: 45200, // Sam's X engagement work
+  },
+  {
+    key: 'agent:subagent:sam-trends',
+    kind: 'subagent',
+    channel: 'cron',
+    displayName: 'Sam Trend Apps',
+    label: 'Sam Trends',
+    updatedAt: Date.now() - 2 * 60 * 60 * 1000, // 2h ago
+    sessionId: 'mock-sam-trends',
+    model: 'anthropic/claude-sonnet-4-5',
+    contextTokens: 100000,
+    totalTokens: 32800,
+  },
+  {
+    key: 'agent:subagent:leo-analysis',
+    kind: 'subagent',
+    channel: 'cron',
+    displayName: 'Leo Deal Analysis',
+    label: 'Leo',
+    updatedAt: Date.now() - 4 * 60 * 60 * 1000, // 4h ago
+    sessionId: 'mock-leo-session',
+    model: 'google/gemini-3-flash-preview',
+    contextTokens: 50000,
+    totalTokens: 18500,
+  },
+  {
+    key: 'agent:cron:dashboard-sync',
+    kind: 'cron',
+    channel: 'cron',
+    displayName: 'Dashboard Sync',
+    updatedAt: Date.now() - 15 * 60 * 1000,
+    sessionId: 'mock-cron-sync',
+    model: 'anthropic/claude-sonnet-4-5',
+    contextTokens: 20000,
+    totalTokens: 8200,
+  },
+  {
+    key: 'agent:cron:night-research',
+    kind: 'cron',
+    channel: 'cron',
+    displayName: 'Night Research Pulse',
+    updatedAt: Date.now() - 6 * 60 * 60 * 1000,
+    sessionId: 'mock-night-research',
+    model: 'google/gemini-3-pro-preview',
+    contextTokens: 100000,
+    totalTokens: 52400,
+  },
+]
 
 // Real tasks being worked on by Francesco's agents
 export const mockTasks: Task[] = [

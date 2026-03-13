@@ -3,6 +3,8 @@ import { Task, TaskStatus } from '../types'
 import { AGENTS, STATUS_COLORS, STATUS_LABELS } from '../types'
 import { AgentStatus, Session } from '../api/openclaw'
 import { AgentHierarchy } from './AgentHierarchy'
+import { TokenUsagePanel } from './TokenUsagePanel'
+import { KeyboardShortcuts } from './KeyboardShortcuts'
 
 interface DashboardProps {
   tasks: Task[]
@@ -140,6 +142,10 @@ export function Dashboard({ tasks, onTaskUpdate, agentStatuses = [], sessions = 
       </div>
 
       <div className="dashboard-content">
+        <TokenUsagePanel sessions={sessions} />
+        
+        <KeyboardShortcuts />
+        
         <AgentHierarchy agentStatuses={mergedAgents} onAgentClick={onAgentClick} />
 
         <div className="section agents-section">

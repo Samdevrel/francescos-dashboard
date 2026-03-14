@@ -233,7 +233,7 @@ export function AgentProfile({ agentId, onBack, realTimeStatus }: AgentProfilePr
 
         {agent.socials && agent.socials.length > 0 && (
           <div className="section socials">
-            <h2><Link size={20} /> Links & Profiles</h2>
+            <h2><Link size={20} /> Links & Profiles ({agent.socials.length})</h2>
             <div className="social-links">
               {agent.socials.map(social => (
                 <a 

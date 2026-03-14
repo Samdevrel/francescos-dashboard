@@ -450,6 +450,8 @@ export function AgentProfile({ agentId, onBack, realTimeStatus }: AgentProfilePr
           display: flex;
           flex-wrap: wrap;
           gap: 0.75rem;
+          margin-top: 1rem;
+          min-height: 60px;
         }
 
         .social-link {
